@@ -1,150 +1,202 @@
-# Agentic Design Patterns Book
+# PaperStitch
 
-A Python tool for compiling academic papers and documents into a cohesive book format with automatic PDF processing, link extraction, and document merging.
+A powerful tool for compiling multi-document publications by following links in PDF files. PaperStitch automatically downloads linked documents (especially Google Docs), converts them to PDFs, and weaves them together into a single, professionally formatted book with clickable table of contents.
 
-## Overview
+## 🚀 Quick Start
 
-This project takes a preprint PDF (like an index or table of contents) with embedded links to Google Docs, Sheets, Slides, and other online documents, then automatically:
+```bash
+# Clone the repository
+git clone https://github.com/staffle/paperstitch.git
+cd paperstitch
 
-- Extracts URLs from PDF annotations and text
-- Downloads and converts linked documents to PDF format
-- Merges all documents with a custom cover
-- Generates a table of contents
-- Creates a references page for unresolved links
+# Run the setup and build script
+./make.sh
+```
 
-## Features
+## ✨ Features
 
-- **Automatic Link Extraction**: Finds URLs in PDF annotations and plain text
-- **Google Workspace Integration**: Converts Google Docs/Sheets/Slides to PDF
-- **Public Drive Folder Scraping**: Downloads documents from shared Google Drive folders
-- **PDF Processing**: Merges multiple PDFs with proper page numbering
-- **Table of Contents**: Optional TOC generation
-- **Cover Integration**: Supports JPG, PNG, or PDF covers
-- **Reference Management**: Lists unresolved links in a references section
+- **Link Following**: Automatically extracts and follows links from your index PDF
+- **Google Docs Integration**: Seamlessly downloads and converts Google Docs to PDF
+- **Smart Compilation**: Merges multiple documents while preserving formatting
+- **Clickable TOC**: Generates interactive table of contents with working hyperlinks
+- **Page Numbering**: Adds consistent page numbers throughout the compiled document
+- **Configurable**: Easy-to-customize book configurations for different projects
+- **Professional Output**: Creates publication-ready PDFs with proper formatting
 
-## Quick Start
+## 📋 Requirements
 
-1. **Set up environment**:
+- Python 3.7+
+- Internet connection (for downloading linked documents)
+- Dependencies listed in `requirements.txt`
+
+## 🛠️ Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/staffle/paperstitch.git
+   cd paperstitch
+   ```
+
+2. **Create a virtual environment** (recommended):
    ```bash
    python3 -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   source .venv/bin/activate  # On macOS/Linux
+   # or
+   .venv\Scripts\activate     # On Windows
+   ```
+
+3. **Install dependencies**:
+   ```bash
    pip install -r requirements.txt
    ```
 
-2. **Prepare your files**:
-   - Place your index PDF and cover image in the project root
-   - Ensure your index PDF contains links to the documents you want to compile
+4. **Prepare your files**:
+   - Place your main PDF file (with links) in the root directory
+   - Add a cover image file (JPEG, PNG, or PDF)
 
-3. **Build the book**:
-   ```bash
-   chmod +x make.sh
-   ./make.sh
-   ```
+## 📖 Usage
 
-   Or run directly:
-   ```bash
-   python3 src/build_book.py index.pdf
-   ```
+### Basic Usage
 
-   With custom configuration:
-   ```bash
-   python3 src/build_book.py index.pdf --book-config agentic_design_patterns
-   ```
+```bash
+python src/build_book.py index.pdf
+```
 
-## Command Line Options
+### Advanced Usage with All Options
 
-- `--index-pdf`: Path to the main PDF containing links to other documents
-- `--cover`: Cover image (JPG, PNG) or PDF file
-- `--out`: Output path for the compiled book
-- `--workdir`: Working directory for temporary files (default: `_agentic_build`)
-- `--book-config`: Book configuration to use (default: `agentic_design_patterns`)
-- `--add-toc`: Generate a table of contents
+```bash
+python src/build_book.py \
+  --index-pdf "your_index.pdf" \
+  --cover "your_cover.jpg" \
+  --out "output/Your_Compiled_Book.pdf" \
+  --workdir "_build" \
+  --book-config "your_config_name" \
+  --add-toc
+```
 
-## Book Configurations
+### Command Line Options
 
-The build system supports multiple book configurations through `src/book_config.py`. Each configuration contains:
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--index-pdf` | Path to your main PDF with links | Required |
+| `--cover` | Cover image file (jpg/png/pdf) | None |
+| `--out` | Output path for compiled PDF | `compiled_book.pdf` |
+| `--workdir` | Working directory for temporary files | `_build` |
+| `--book-config` | Book configuration to use | `default` |
+| `--add-toc` | Add clickable table of contents | False |
 
-- Book name and output filename
-- Working directory name
-- Predefined table of contents headings
-- Other book-specific settings
+### Using the Convenience Script
 
-### Available Configurations
+The `make.sh` script provides a quick way to build with common settings:
 
-- `agentic_design_patterns`: Configuration for the Agentic Design Patterns book
+```bash
+./make.sh
+```
 
-### Adding New Configurations
+This script will:
+1. Create a virtual environment
+2. Install dependencies
+3. Build your book with predefined settings
 
-To add a new book configuration:
+## 📁 File Structure
+
+```
+paperstitch/
+├── src/
+│   ├── build_book.py          # Main compilation script
+│   ├── book_config.py         # Book configuration settings
+│   └── stamp_page_numbers.py  # Page numbering utility
+├── requirements.txt           # Python dependencies
+├── make.sh                   # Convenience build script
+├── README.md                 # This file
+├── .gitignore               # Git ignore rules
+├── index.pdf                # Your main PDF (place here)
+├── cover.jpeg              # Your cover image (place here)
+├── _build/                 # Working directory (auto-created)
+└── output/                 # Compiled books output here
+```
+
+## ⚙️ Configuration
+
+PaperStitch uses a configuration system to handle different book projects. Configurations are defined in `src/book_config.py`.
+
+### Current Configurations
+
+- **`agentic_design_patterns`**: Default configuration for the Agentic Design Patterns book
+- **`default`**: Basic configuration for general use
+
+### Adding a New Book Configuration
 
 1. Open `src/book_config.py`
-2. Create a new configuration dictionary:
+2. Add your configuration dictionary:
    ```python
-   NEW_BOOK_CONFIG = {
-       'name': 'Your Book Name',
-       'output_filename': 'Your_Book_compiled.pdf', 
-       'workdir': '_your_build',
-       'predefined_headings': [
-           'Chapter 1: Introduction',
-           'Chapter 2: Advanced Topics',
-           # Add your TOC headings here
+   YOUR_BOOK_CONFIG = {
+       "predefined_toc_headings": [
+           "Chapter 1: Introduction",
+           "Chapter 2: Your Content",
+           # ... add your headings
        ]
    }
    ```
-3. Add it to the `BOOK_CONFIGS` dictionary:
+3. Register it in `BOOK_CONFIGS`:
    ```python
    BOOK_CONFIGS = {
-       'agentic_design_patterns': AGENTIC_DESIGN_PATTERNS_CONFIG,
-       'your_book': NEW_BOOK_CONFIG,
+       "your_book": YOUR_BOOK_CONFIG,
+       # ... existing configs
    }
    ```
-4. Use it: `python src/build_book.py index.pdf --book-config your_book`
+4. Use it with: `--book-config your_book`
 
-## Requirements
+## 🔧 How It Works
 
-- Python 3.7+
-- Dependencies listed in `requirements.txt`:
-  - pypdf
-  - requests
-  - beautifulsoup4
-  - pillow
-  - tqdm
-  - reportlab
-  - PyMuPDF (optional, for enhanced PDF processing)
+1. **Link Extraction**: Scans your index PDF for hyperlinks
+2. **Document Discovery**: Identifies Google Docs and other supported document types
+3. **Download & Convert**: Automatically downloads and converts documents to PDF
+4. **Page Processing**: Adds consistent page numbering across all documents
+5. **Smart Merging**: Combines all PDFs while maintaining proper page flow
+6. **TOC Generation**: Creates clickable table of contents based on document structure
+7. **Final Assembly**: Produces a single, professional PDF with cover and navigation
 
-## File Structure
+## 📝 Supported Link Types
 
-```
-├── src/
-│   ├── build_book.py       # Main compilation script
-│   ├── book_config.py      # Book configuration settings
-│   └── stamp_page_numbers.py  # Page numbering utility
-├── _agentic_build/         # Working directory (auto-generated)
-├── requirements.txt        # Python dependencies
-├── make.sh                # Build script
-├── index.pdf              # Your index/TOC PDF
-├── cover.jpeg             # Cover image
-└── README.md              # This file
+- **Google Docs**: Automatically detected and converted
+- **Direct PDF links**: Downloaded and included
+- **Other document formats**: Basic support for various online documents
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**"No module named 'requests'"**
+```bash
+pip install -r requirements.txt
 ```
 
-## How It Works
+**"Can't open file 'build_book.py'"**
+```bash
+# Make sure you're running from the project root
+python src/build_book.py --help
+```
 
-1. **URL Extraction**: Scans the index PDF for hyperlinks in annotations and text
-2. **Link Processing**: Normalizes URLs, especially Google Workspace links
-3. **Document Download**: Fetches linked documents and converts to PDF
-4. **PDF Assembly**: Merges cover, table of contents, downloaded documents, and references
-5. **Output Generation**: Creates the final compiled book with proper page numbering
+**"Permission denied" on make.sh**
+```bash
+chmod +x make.sh
+```
 
-## Supported Link Types
+**Links not working in output PDF**
+- Ensure you used the `--add-toc` flag
+- Check that your index PDF contains valid hyperlinks
+- Verify the working directory contains `_visible_numbers.json`
 
-- Google Docs (automatically converted to PDF)
-- Google Sheets (exported as PDF)
-- Google Slides (exported as PDF)
-- Public Google Drive folders (recursively scraped)
-- Direct PDF links
-- Other web pages (converted to PDF when possible)
+### Debug Mode
 
-## Contributing
+For troubleshooting, you can check the working directory contents:
+```bash
+ls -la _build/  # Check downloaded files
+cat _build/_visible_numbers.json  # Check page mapping
+```
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -152,17 +204,18 @@ To add a new book configuration:
 4. Test thoroughly
 5. Submit a pull request
 
-## License
+## 📄 License
 
 This project is open source. Please check the license file for details.
 
-## Troubleshooting
+## 🎯 Use Cases
 
-- **Missing links**: Check that URLs in your index PDF are properly formatted
-- **Download failures**: Ensure linked documents are publicly accessible
-- **PDF merge issues**: Verify that all source PDFs are valid and not corrupted
-- **Memory issues**: For large documents, consider processing in smaller batches
+- **Academic Papers**: Compile research papers with references
+- **Technical Documentation**: Merge multiple technical documents
+- **Book Publishing**: Create professional books from distributed content
+- **Report Generation**: Combine multiple reports into single publications
+- **Content Aggregation**: Stitch together content from various sources
 
-## Support
+---
 
-If you encounter issues or have questions, please open an issue on the repository.
+**PaperStitch** - Weaving documents together, one link at a time. 🧵📄
