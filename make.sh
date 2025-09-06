@@ -13,9 +13,9 @@ pip3 install -r requirements.txt
 #    - the cover image (jpg/png or pdf)
 
 
-python3 build_book.py \
+python3 src/build_book.py \
   --index-pdf "index.pdf" \
   --cover "cover.jpeg" \
-  --out "Agentic_Design_Patterns_compiled.pdf" \
+  --out "output/Agentic_Design_Patterns_compiled.pdf" \
   --workdir "_agentic_build" \
   --add-toc
