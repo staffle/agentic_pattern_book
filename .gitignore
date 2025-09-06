@@ -83,7 +83,6 @@ $RECYCLE.BIN/
 
 # Build artifacts and output
 _agentic_build/
-*.pdf
 !index.pdf
 !cover.*
 
