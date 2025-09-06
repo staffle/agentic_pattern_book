@@ -1,0 +1,7 @@
+pypdf
+requests
+beautifulsoup4
+pillow
+tqdm
+reportlab
+PyMuPDF
